@@ -1,0 +1,20 @@
+BIOMASSPARCEL=biomassParcel
+DERIVEDPARCEL=$(BIOMASSPARCEL)/derivedBiomassParcel
+
+BIOMASSCLOUD=biomassCloud
+BASECLOUD=$(BIOMASSCLOUD)/baseClass
+/* DERIVEDCLOUD=$(BIOMASSCLOUD)/derivedBiomassCloud */
+
+
+/* Cloud base classes */
+$(BASECLOUD)/reactingMultiphaseIBMCloud/reactingMultiphaseIBMCloud.C
+
+
+/* biomass parcel and sub-models */
+$(DERIVEDPARCEL)/defineBiomassParcel.C
+$(DERIVEDPARCEL)/makeBiomassParcelSubmodels.C
+biomassCloudList/biomassCloudList.C
+
+
+
+LIB = $(FOAM_USER_LIBBIN)/libbiomassCombustion

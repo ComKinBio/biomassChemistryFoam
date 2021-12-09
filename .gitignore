@@ -1,0 +1,14 @@
+!Make/
+Make/*
+!Make/files
+!Make/options
+!*/Make/
+*/Make/*
+!*/Make/files
+!*/Make/options
+*/lnInclude
+!*/*/Make/
+*/*/Make/*
+!*/*/Make/files
+!*/*/Make/options
+*/*/lnInclude

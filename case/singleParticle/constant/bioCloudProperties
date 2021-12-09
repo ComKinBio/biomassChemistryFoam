@@ -1,0 +1,360 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.1.0                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      bioCloudProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+solution
+{
+    active          true;
+    transient       yes;
+    coupled         true;
+    cellValueSourceCorrection on;
+
+    sourceTerms
+    {
+        schemes
+        {
+            rho             semiImplicit 1;
+            U               semiImplicit 1;
+            Yi              semiImplicit 1;
+            h               semiImplicit 1;
+            radiation       semiImplicit 1;
+        }
+    }
+
+    interpolationSchemes
+    {
+        rho             cell;
+        U               cellPoint;
+        thermo:mu       cell;
+        T               cell;
+        Cp              cell;
+        kappa           cell;
+        p               cell;
+        G               cell;
+        alpha           cell;
+    }
+
+    integrationSchemes
+    {
+        U               Euler;
+        T               analytical;
+    }
+}
+
+constantProperties
+{
+    parcelTypeId    1;
+    
+    parcelShape     1;
+    xi0             -0.004142616;
+    rhoMin          1e-15;
+    TMin            200;
+    pMin            1000;
+    minParticleMass 1e-15;
+
+    rho0            1030;// add
+    T0              298;// add
+    Cp0             1500;// add
+
+    epsilon0        0.8;//particle emissivity []
+    f0              0.5;
+
+    Pr              0.7;
+    TDevol          300;// add
+    LDevol          0;
+    hRetentionCoeff 1;// add as COmiga--activation energy in omega function
+    Srinkalpha      0.10; // add
+    Srinkbeta       0.39; // add
+    Srinkgamma      0.95;// add
+
+           
+    //- Layer initial properties
+    Tb00    298;
+    Tb10    298;
+    Tb20    298;
+    Tb30    298;
+    
+    rb00    0.0030896;
+    rb00    0.0030824; //for cylinder
+    rb10    0.0030906;
+    rb20    0.0030917;   
+    rb30    0.0030927;
+    
+//     rb00    0.0041664;
+//     rb10    0.00417757;
+//     rb20    0.00418877;   
+//     rb30    0.0042;
+    
+    Tp00    298;
+    Tp10    298;     
+    Tp20    298;  
+    Tp30    298;     
+    
+    deltaTime 1e-4;
+    
+//     hCoeff 58;
+    
+    
+}
+
+subModels
+{
+    particleForces
+    {
+//         ErgunWenYuDrag
+//         {
+//             alphac alpha;
+//         }
+//         gravity;
+    }
+
+    injectionModels
+    {
+        model1
+        {
+            type            manualInjection;
+            massTotal       0;
+            parcelBasisType fixed;
+            nParticle       1;
+            SOI             0;
+            positionsFile   "bioCloudPositions";
+            U0              (0 0 0);
+            sizeDistribution
+            {
+                type        fixedValue;
+                fixedValueDistribution
+                {
+                    value   0.0061854;
+                }
+            }
+        }
+    }
+    
+    dispersionModel none; // add
+
+    patchInteractionModel localInteraction;
+    
+    localInteractionCoeffs    
+    {
+       patches
+       (
+          walls
+          {
+                type rebound;
+                e    0.97;
+                mu   0.09;
+          }  
+          top
+          {
+                type rebound;
+                e    0.97;
+                mu   0.09;
+          }
+         bottom
+          {
+                type rebound;
+                e    0.97;
+                mu   0.09;
+	      }
+       );
+    }
+    
+    
+    stochasticCollisionModel none;
+
+    heatTransferModel RanzMarshall;
+
+    compositionModel singleMixtureFraction;
+
+    phaseChangeModel liquidEvaporation;
+
+    devolatilisationModel none;
+
+    surfaceReactionModel none;
+    
+    pyrolysisModel DiBlasiPyrolysis; //add
+
+    charOxidizationModel COxidationKineticDiffusionLimitedRateWithAshSteam; //add
+
+    surfaceFilmModel none;
+
+    radiation       on;
+
+    
+    RanzMarshallCoeffs
+    {
+        BirdCorrection  false;
+    }
+
+    singleMixtureFractionCoeffs
+    {
+        phases
+        (
+            gas // number doesn't mean any thing
+            {
+                CH4             0.1;
+                H2              0.1;
+                CO2             0.1;
+                CO              0.1;
+                H2O             0.1;
+                tar             0.5;
+            }
+            liquid
+            {
+                H2O             1.0;
+            }
+            solid
+            {
+                wood             0.9634; //name must be the wood, consume with H2O
+                activeDryWood    0.0; // dry wood can devo
+                C                0.0;  //name must be the C
+                ash              0.0366; 
+            }
+        );
+        YGasTot0        0.0;
+        YLiquidTot0     0.098;
+        YSolidTot0      0.902;
+    }
+
+    liquidEvaporationCoeffs
+    {
+        enthalpyTransfer enthalpyDifference;
+
+        activeLiquids
+        (
+            H2O
+        );
+    }
+
+    DiBlasiPyrolysisCoeffs
+    {
+      
+      woodProximate     (0.45 0.06 0.49); // (C H O)
+      tarProximate      (0.53 0.065 0.401); // (C  H  O)
+      
+      secondGasVersion 3;
+
+      //Thurner and Mann 1981
+      //devolKinetic1     (5.16E+06 8.400E+07 ); // (A1 E1 ) wood gas1
+      //devolKinetic2     (1.48E+10 1.127E+08 ); // (A2 E2 ) wood tar
+      //devolKinetic3	(2.66E+10 1.065E+08 ); // (A3 E3 ) wood char
+
+      //Thurner and Mann 1981 version 2
+      //devolKinetic1     (1.43E+04 8.860E+07 ); // (A1 E1 ) wood gas1
+      //devolKinetic2     (4.12E+06 1.127E+08 ); // (A2 E2 ) wood tar
+      //devolKinetic3     (7.40E+05 1.065E+08 ); // (A3 E3 ) wood char
+
+      //Chan 1985
+      //devolKinetic1     (1.30E+08 1.40E+08 ); // (A1 E1 ) wood gas1
+      //devolKinetic2     (2.00E+08 1.33E+08 ); // (A2 E2 ) wood tar
+      //devolKinetic3	  (1.08E+07 1.21E+08 ); // (A3 E3 ) wood char
+
+      //Font 1990
+      //devolKinetic1     (1.52E+07 1.392E+08 ); // (A1 E1 ) wood gas1
+      //devolKinetic2     (5.85E+06 1.190E+08 ); // (A2 E2 ) wood tar
+      //devolKinetic3	  (2.98E+03 7.310E+07 ); // (A3 E3 ) wood char
+
+      // DI BLASI
+      //devolKinetic1     (4.4E+09 1.53E+08 ); // (A1 E1 ) wood gas1
+      //devolKinetic2     (1.1E+10 1.48E+08 ); // (A2 E2 ) wood tar
+      //devolKinetic3     (3.3E+06 1.12E+08 ); // (A3 E3 ) wood char
+
+      // Wagenaar 1994
+      devolKinetic1     (1.10E+11 1.77E+08 ); // (A1 E1 ) wood gas1
+      devolKinetic2     (9.28E+09 1.49E+08 ); // (A2 E2 ) wood tar
+      devolKinetic3     (3.05E+07 1.25E+08 ); // (A3 E3 ) wood char
+      
+       // H. Strom H. Thunman 2013
+//       devolKinetic1     (1.3E+08 1.40E+08 ); // (A1 E1 ) wood gas1
+//       devolKinetic2     (2.0E+08 1.33E+08 ); // (A2 E2 ) wood tar
+//       devolKinetic3     (1.08E+07 1.21E+08 ); // (A3 E3 ) wood char     
+      
+      
+      
+      
+      
+      devolKinetic4	(4.28E+06 1.075E+08 ); // (A4 E4 ) tar light gas
+      devolKinetic5	(1.0E+05  1.075E+08 ); // (A5 E5 ) tar char
+      
+      
+      
+      
+//       volgas1 //light gas
+//       (
+//         (H2     0.109    12  4  0.0)   // (name weight_fraction  C_mass_fraction H_mass_fraction O_mass_fraction)
+//         (CO      0.396    12  4  0.0)   // (name weight_fraction C_mass_fraction H_mass_fraction O_mass_fraction)
+//         (CO2     0.209    12  4  0.0)  // (name weight_fraction C_mass_fraction H_mass_fraction O_mass_fraction)
+//         (H2O     0.249    12  4  0.0) // (name weight_fraction C_mass_fraction H_mass_fraction O_mass_fraction)
+//         (tar     0.127    12  4  0.0) // (name weight_fraction C_mass_fraction H_mass_fraction O_mass_fraction)
+//       ); 
+      
+      volgas1 //light gas
+      (
+        (H2O     0.2196    12  4  0.0) // (name weight_fraction C_mass_fraction H_mass_fraction O_mass_fraction)
+        (H2     0.0047    12  4  0.0)   // (name weight_fraction  C_mass_fraction H_mass_fraction O_mass_fraction)
+        (CO      0.1270    12  4  0.0)   // (name weight_fraction C_mass_fraction H_mass_fraction O_mass_fraction)
+        (CO2     0.2440    12  4  0.0)  // (name weight_fraction C_mass_fraction H_mass_fraction O_mass_fraction)
+        (CH4     0.0355    12  4  0.0)   // (name weight_fraction  C_mass_fraction H_mass_fraction O_mass_fraction)
+        (tar     0.3692    12  4  0.0) // (name weight_fraction C_mass_fraction H_mass_fraction O_mass_fraction)
+      );
+      
+      volgas2
+      (
+        (CH4     0.25    12  4  0.0  77625    9.42E+07)   // (name weight_fraction  C_mass_fraction H_mass_fraction O_mass_fraction)
+//        (C2H4    0.25    12  4  0.0  144544   1.09E+08)   // (name weight_fraction C_mass_fraction H_mass_fraction O_mass_fraction)
+//        (C2H6    0.25    12  4  0.0  33       1.39E+08)  // (name weight_fraction C_mass_fraction H_mass_fraction O_mass_fraction)
+        (CO2     0.25    12  4  0.0  355      4.90E+07) // (name weight_fraction C_mass_fraction H_mass_fraction O_mass_fraction)
+        (CO      0.25    12  4  0.0  45709    8.79E+07) // (name weight_fraction C_mass_fraction H_mass_fraction O_mass_fraction)
+        (H2      0.25    12  4  0.0  4365158  1.29E+08) // (name weight_fraction C_mass_fraction H_mass_fraction O_mass_fraction)
+      );
+      
+        residualCoeff   1E-06;
+    }
+    
+
+    COxidationKineticDiffusionLimitedRateWithAshSteamCoeffs
+    {
+        COmiga        3390.0;// activation energy in omega function
+        ep3            0.65;//porosity of ash layer
+        C1_O2           2.03e-10;//mass diffusion constant
+        C1_H2O           8.48e-10;//mass diffusion constant
+        C1_CO2           5.37e-10;//mass diffusion constant
+        C1_H2           2.60e-9;//mass diffusion constant
+        C2_1            1.715;//- Kinetics limited rate pre-exponential constant, C2
+        C2_2            3.42;//- Kinetics limited rate pre-exponential constant, C2
+        C2_3            3.42;//- Kinetics limited rate pre-exponential constant, C2
+        C2_4            3.42e-3;//- Kinetics limited rate pre-exponential constant, C2
+        E1              9000.0;//- Kinetics limited rate activation energy RR together
+        E2              15600.0;//- Kinetics limited rate activation energy RR together
+        E3              15600.0;//- Kinetics limited rate activation energy RR together
+        E4              15600.0;//- Kinetics limited rate activation energy RR together
+      //C1              5.0E-12; //mass diffusion constant, same value for O2, CO2, and H2O
+        AO2              2.51E-03;//pre-exponential factor
+        AH2O              2.0E-03;
+        ACO2              3.0E-01;
+        EO2               7.48E+07; //activation energy
+        EH2O               1.96E+08;
+        ECO2               2.00E+08;
+    }
+
+}
+
+
+cloudFunctions
+{}
+
+
+// ************************************************************************* //
