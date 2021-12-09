@@ -90,9 +90,7 @@ Two submodels with RTS mechanism are added. The PyrolysisModel (which is modifie
 
 The solver is a copy of the [coalChemistryFoam](https://github.com/OpenFOAM/OpenFOAM-7/tree/master/applications/solvers/lagrangian/coalChemistryFoam), but the coalCloud is replaced by the biomassCloud. The OpenFOAM7 is required. Multi-version support is on the todo list.
 
-A single particle case is added as a test and tutorial case for this slove.
-
-More features will be added to this solver.
+A single particle case is added as a test and tutorial case for this slover.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
