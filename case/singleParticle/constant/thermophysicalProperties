@@ -1,0 +1,90 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  7  
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      thermophysicalProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+thermoType
+{
+    type            hePsiThermo;
+    mixture         reactingMixture;
+    transport       sutherland;
+    thermo          janaf;
+    energy          sensibleEnthalpy;
+    equationOfState perfectGas;
+    specie          specie;
+}
+
+chemistryReader foamChemistryReader;
+
+foamChemistryThermoFile "$FOAM_CASE/constant/foam.dat";
+
+foamChemistryFile "$FOAM_CASE/constant/foam.inp";
+
+inertSpecie     N2;
+
+liquids
+{
+    H2O
+    {
+        defaultCoeffs   yes;
+    }
+}
+
+solids
+{
+    wood
+    {
+        defaultCoeffs   no;
+        woodCoeffs 
+        {
+            rho             1450; //Morten p24
+            Cp              1500; // di blasi and russo 1994 
+            K               0.279; // Ranznjevic 1976 p128 morten
+            Hf              0;
+            emissivity      1.0;
+        }
+    }
+    activeDryWood
+        {
+        defaultCoeffs   no;
+        activeDryWoodCoeffs 
+        {
+            rho             1450; //Morten p24
+            Cp              1500; // di blasi and russo 1994 
+            K               0.279; // Ranznjevic 1976 p128 morten
+            Hf              0;
+            emissivity      1.0;
+        }
+    }
+    C
+    {
+        defaultCoeffs   no;
+        CCoeffs
+        {
+            rho             1570; // Morten p24
+            Cp              1100; // Di blasi and Russo 1994
+            K               0.0878; // Lee et al. 1976 p128 morten
+            Hf              0;
+            emissivity      1.0;
+        }
+    }
+    ash
+    {
+      defaultCoeffs   yes;
+    }
+}
+
+
+// ************************************************************************* //
