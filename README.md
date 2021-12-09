@@ -33,9 +33,9 @@ The biomassChemistryFoam is an extended solver based on the official "[coalChemi
 
 <div align="center">
   <p align="center">
-    <a href="https://github.com/Jingyuan92/ReadMeProofReading/issues">Report Bug</a>
+    <a href="https://github.com/ComKinBio/biomassChemistryFoam/issues">Report Bug</a>
     ·
-    <a href="https://github.com/Jingyuan92/ReadMeProofReading/issues">Request Feature</a>
+    <a href="https://github.com/ComKinBio/biomassChemistryFoam/issues">Request Feature</a>
   </p>
 </div>
 
@@ -157,13 +157,13 @@ If you use biomassChemistryFoam in your research, you may want to cite the follo
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [contributors-shield]: https://img.shields.io/github/contributors/Jingyuan92/ReadMeProofReading.svg?style=flat
-[contributors-url]: https://github.com/Jingyuan92/ReadMeProofReading/graphs/contributors
+[contributors-url]: https://github.com/ComKinBio/biomassChemistryFoam/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/Jingyuan92/ReadMeProofReading.svg?style=flat
-[forks-url]: https://github.com/Jingyuan92/ReadMeProofReading/network/members
+[forks-url]: https://github.com/ComKinBio/biomassChemistryFoam/network/members
 [stars-shield]: https://img.shields.io/github/stars/Jingyuan92/ReadMeProofReading.svg?style=flat
-[stars-url]: https://github.com/Jingyuan92/ReadMeProofReading/stargazers
+[stars-url]: https://github.com/ComKinBio/biomassChemistryFoam/stargazers
 [issues-shield]: https://img.shields.io/github/issues/Jingyuan92/ReadMeProofReading.svg?style=flat
-[issues-url]: https://github.com/Jingyuan92/ReadMeProofReading/issues
+[issues-url]: https://github.com/ComKinBio/biomassChemistryFoam/issues
 [license-shield]: https://img.shields.io/badge/License-GPLv3-blue.svg
 [license-url]: https://www.gnu.org/licenses/gpl-3.0
 
