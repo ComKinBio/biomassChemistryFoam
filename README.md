@@ -139,7 +139,7 @@ Research group: [ComKin group at NTNU](https://www.ntnu.edu/comkin/)
 <!-- Publications -->
 ## Publications
 
-If you use biomassChemistryFoam in your research, you may want to cite the following papers:
+If you want to use biomassChemistryFoam in your research, you should cite the following papers:
 
 ### Publications using this repo
 * <a id="1">[1]</a> [Zhang J, Li T, Ström H, et al. Grid-independent Eulerian-Lagrangian approaches for simulations of solid fuel particle combustion[J]. Chemical Engineering Journal, 2020, 387: 123964.](https://www.sciencedirect.com/science/article/pii/S1385894719333790)
