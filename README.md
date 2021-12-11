@@ -126,7 +126,7 @@ Distributed under the [GPLv3 License](https://www.gnu.org/licenses/gpl-3.0.en.ht
 
 Jingyuan Zhang - jingyuan.zhang@ntnu.no 
 
-Tian Li - tian.li@ntnu.no/tian.li@risefr.no
+Tian Li - tian.li@ntnu.no / tian.li@risefr.no
 
 Henrik Ström - henrik.strom@chalmers.se
 
