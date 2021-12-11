@@ -102,7 +102,7 @@ A single particle case is added as a test and tutorial case for this slover.
 
 This repo accepts updating. For example, correcting the coding style to the [OpenFOAM style](https://openfoam.org/dev/coding-style-guide/), adding particle shape submodel to [RTS mechanism](https://openfoamwiki.net/index.php/OpenFOAM_guide/runTimeSelection_mechanism), making submodels of thermally thick particle properties (currently hard coded)... ...
 
-If you have any contribution to this repo, please fork the repo and create a pull request. You can also simply open an issue with the tag "improvement".
+If you have any contribution to this repo, please fork the repo and create a pull request (to dev). You can also simply open an issue with the tag "improvement".
 
 Besides coding, academic discussions through emails are most approciated.
 
